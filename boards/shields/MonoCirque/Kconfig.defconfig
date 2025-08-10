@@ -1,0 +1,12 @@
+# Copyright (c) 2022 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+if SHIELD_MONOCIRQUE
+
+config ZMK_KEYBOARD_NAME
+    default "MonoCirque"
+
+config ZMK_STUDIO
+  default y
+
+endif
