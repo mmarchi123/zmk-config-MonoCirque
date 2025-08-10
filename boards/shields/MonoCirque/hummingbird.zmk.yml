@@ -1,0 +1,9 @@
+file_format: "1"
+id: monocirque
+name: MonoCirque
+type: shield
+url: https://github.com/diecuriousdnd/zmk-config-MonoCirque
+requires: [seeed_xiao]
+features:
+  - keys
+  - studio
