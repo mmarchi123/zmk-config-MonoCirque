@@ -59,8 +59,8 @@
             bindings = <
                 &trans    &kp B   &kp Y    &kp O     &kp U           &kp L         &kp D      &kp W    &kp V   &trans
                 &kp LSHIFT    &kp C   &kp I    &kp E     &kp A        &kp H         &kp T      &kp S    &kp N   &kp BSPC
-                &kp Q    &kp G   &kp X    &kp J     &kp K        &kp R         &&kp M     &kp F    &kp P   &kp Z
-                                 &lt NAV_L TAB  &kp RET       &lt NUM_L SPACE  &lt SYM_L BSPC
+                &mt LCTRL Q    &kp G   &kp X    &kp J     &kp K        &kp R         &&kp M     &kp F    &kp P   &kp Z
+                             &lt NAV_L TAB  &kp RET &lt NAV_L TAB     &lt NUM_L SPACE &kp RET  &lt SYM_L BSPC
             >;
         };
 
