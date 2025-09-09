@@ -11,8 +11,6 @@
         compatible = "zmk,keymap";
         
         default_layer {
-            // Minimal keymap for standalone trackpad
-            // This single "none" binding matches the 1x1 matrix transform
             bindings = 
                 &none
             >;
