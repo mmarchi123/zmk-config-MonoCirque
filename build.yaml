@@ -20,13 +20,4 @@
 ---
 include:
   - board: seeeduino_xiao_ble
-    shield: hummingbird
-include:
-  - board: seeeduino_xiao_ble
-    shield: hummingbird
-include:
-  - board: seeeduino_xiao_ble
-    shield: hummingbird
-include:
-  - board: seeeduino_xiao_ble
-    shield: hummingbird
+    shield: MonoCirque
