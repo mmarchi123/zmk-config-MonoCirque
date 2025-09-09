@@ -28,6 +28,12 @@
         col-gpios = <&xiao_d 0 GPIO_ACTIVE_HIGH>;
         row-gpios = <&xiao_d 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
     };
+
+    /* Input listener for trackpad */
+    trackpad_listener {
+        compatible = "zmk,input-listener";
+        device = <&trackpad>;
+    };
 };
 
 /* Cirque Trackpad SPI Configuration */
@@ -44,16 +50,5 @@
         sensitivity = "4x";
         sleep;
         no-taps;
-    };
-};
-
-/ {
-    /* Input listener for trackpad */
-    trackpad_listener {
-        compatible = "zmk,input-listener";
-        device = <&trackpad>;
-        
-        /* Optional: Configure input processors */
-        input-processors = <>;
     };
 };
