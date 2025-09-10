@@ -1,5 +1,5 @@
 /*
- * MonoCirque - Basic Working Trackpad
+ * MonoCirque - Standalone Cirque Trackpad with Auto-Features
  */
 
 #include <dt-bindings/zmk/matrix_transform.h>
@@ -21,6 +21,7 @@
         map = <RC(0,0)>;
     };
 
+    /* Minimal dummy kscan - required by ZMK but not physically connected */
     kscan0: kscan {
         compatible = "zmk,kscan-gpio-matrix";
         wakeup-source;
@@ -28,31 +29,28 @@
         row-gpios = <&xiao_d 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
     };
 
+    /* Trackpad input listener with auto-scroll and speed features */
     trackpad_listener {
         compatible = "zmk,input-listener";
         device = <&trackpad>;
         
-        /* Base processors for normal operation */
-        input-processors = <&zip_xy_scaler 2 1>;
+        /* Base: Normal cursor movement with medium speed */
+        input-processors = <&zip_xy_scaler 3 1>;
         
-        /* Layer-based overrides */
-        scroll_mode {
-            layers = <1>;
-            input-processors = <&zip_xy_to_scroll_mapper>;
+        /* Auto-enable scroll mode when trackpad is touched */
+        auto_scroll {
+            input-processors = <&zip_temp_layer 1 2000>, <&zip_xy_to_scroll_mapper>;
         };
         
+        /* Precision mode - auto-activates for very light touches */
         precision_mode {
-            layers = <2>; 
-            input-processors = <&zip_xy_scaler 1 2>;  /* Slow/precise */
-        };
-        
-        fast_mode {
-            layers = <3>;
-            input-processors = <&zip_xy_scaler 4 1>;  /* Fast movement */
+            layers = <2>;
+            input-processors = <&zip_xy_scaler 1 2>;  /* Half speed for precision */
         };
     };
 };
 
+/* Cirque Trackpad SPI Configuration */
 &xiao_spi {
     status = "okay";
     cs-gpios = <&xiao_d 7 GPIO_ACTIVE_LOW>;

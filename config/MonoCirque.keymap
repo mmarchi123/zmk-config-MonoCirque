@@ -6,6 +6,17 @@
         compatible = "zmk,keymap";
         
         default_layer {
+            /* Layer 0: Normal cursor mode */
+            bindings = <&none>;
+        };
+        
+        scroll_layer {
+            /* Layer 1: Scroll mode (auto-activated) */
+            bindings = <&none>;
+        };
+        
+        precision_layer {
+            /* Layer 2: Precision mode (for fine work) */
             bindings = <&none>;
         };
     };
