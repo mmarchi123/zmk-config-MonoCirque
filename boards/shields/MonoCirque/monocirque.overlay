@@ -31,7 +31,25 @@
     trackpad_listener {
         compatible = "zmk,input-listener";
         device = <&trackpad>;
-        input-processors = <&zip_xy_scaler 2 1>;  /* 2x speed */
+        
+        /* Base processors for normal operation */
+        input-processors = <&zip_xy_scaler 2 1>;
+        
+        /* Layer-based overrides */
+        scroll_mode {
+            layers = <1>;
+            input-processors = <&zip_xy_to_scroll_mapper>;
+        };
+        
+        precision_mode {
+            layers = <2>; 
+            input-processors = <&zip_xy_scaler 1 2>;  /* Slow/precise */
+        };
+        
+        fast_mode {
+            layers = <3>;
+            input-processors = <&zip_xy_scaler 4 1>;  /* Fast movement */
+        };
     };
 };
 
