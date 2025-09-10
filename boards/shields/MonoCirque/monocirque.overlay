@@ -48,6 +48,7 @@
         status = "okay";
         dr-gpios = <&xiao_d 6 (GPIO_ACTIVE_HIGH)>;
         sensitivity = "4x";
+        y-invert;
         sleep;
         no-taps;
     };
