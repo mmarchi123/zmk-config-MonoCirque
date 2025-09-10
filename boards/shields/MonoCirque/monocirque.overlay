@@ -1,8 +1,9 @@
 /*
- * MonoCirque - Standalone Cirque Trackpad
+ * MonoCirque - Basic Working Trackpad
  */
 
 #include <dt-bindings/zmk/matrix_transform.h>
+#include <input/processors.dtsi>
 
 / {
     model = "MonoCirque Trackpad";
@@ -20,23 +21,20 @@
         map = <RC(0,0)>;
     };
 
-    /* Minimal dummy kscan - required by ZMK */
     kscan0: kscan {
         compatible = "zmk,kscan-gpio-matrix";
         wakeup-source;
-        
         col-gpios = <&xiao_d 0 GPIO_ACTIVE_HIGH>;
         row-gpios = <&xiao_d 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
     };
 
-    /* Basic input listener */
     trackpad_listener {
         compatible = "zmk,input-listener";
         device = <&trackpad>;
+        input-processors = <&zip_xy_scaler 2 1>;  /* 2x speed */
     };
 };
 
-/* Cirque Trackpad SPI Configuration */
 &xiao_spi {
     status = "okay";
     cs-gpios = <&xiao_d 7 GPIO_ACTIVE_LOW>;
