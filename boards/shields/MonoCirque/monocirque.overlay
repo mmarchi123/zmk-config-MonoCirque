@@ -1,5 +1,5 @@
 /*
- * MonoCirque - Standalone Cirque Trackpad with Auto-Features
+ * MonoCirque - Standalone Cirque Trackpad with Auto-Scroll
  */
 
 #include <dt-bindings/zmk/matrix_transform.h>
@@ -29,23 +29,17 @@
         row-gpios = <&xiao_d 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
     };
 
-    /* Trackpad input listener with auto-scroll and speed features */
+    /* Trackpad input listener */
     trackpad_listener {
         compatible = "zmk,input-listener";
         device = <&trackpad>;
         
-        /* Base: Normal cursor movement with medium speed */
-        input-processors = <&zip_xy_scaler 3 1>;
+        /* Base: Normal cursor movement with 2x speed */
+        input-processors = <&zip_xy_scaler 2 1>;
         
-        /* Auto-enable scroll mode when trackpad is touched */
+        /* Auto-scroll: Activates temporarily when trackpad is used */
         auto_scroll {
             input-processors = <&zip_temp_layer 1 2000>, <&zip_xy_to_scroll_mapper>;
-        };
-        
-        /* Precision mode - auto-activates for very light touches */
-        precision_mode {
-            layers = <2>;
-            input-processors = <&zip_xy_scaler 1 2>;  /* Half speed for precision */
         };
     };
 };

@@ -11,12 +11,7 @@
         };
         
         scroll_layer {
-            /* Layer 1: Scroll mode (auto-activated) */
-            bindings = <&none>;
-        };
-        
-        precision_layer {
-            /* Layer 2: Precision mode (for fine work) */
+            /* Layer 1: Auto-activated scroll mode */
             bindings = <&none>;
         };
     };
