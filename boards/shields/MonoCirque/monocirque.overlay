@@ -58,6 +58,7 @@
         dr-gpios = <&xiao_d 6 (GPIO_ACTIVE_HIGH)>;
         sensitivity = "4x";
         sleep;
+        y-invert;
         /* Enable taps - remove no-taps */
         /* no-taps; */
     };
