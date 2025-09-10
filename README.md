@@ -126,23 +126,37 @@ CONFIG_ZMK_IDLE_SLEEP_TIMEOUT=900000
 
 ### Device Not Detected
 - Check all connections, especially power (VCC/GND)
-- Verify SPI pins are correctly connected
+- Verify SPI pins are correctly connected (pins 6-12 on XIAO BLE)
 - Ensure firmware flashed successfully
 
-### Poor Tracking
-- Adjust sensitivity setting in overlay
+### Poor Tracking or Cursor Issues
+- Adjust cursor speed by changing scaler values in overlay
 - Check for interference on SPI lines
 - Verify trackpad surface is clean
+- Confirm Y-axis inversion setting matches preference
 
-### Connection Issues
-- Clear Bluetooth pairing and re-pair
-- Check battery level
-- Verify firmware includes `CONFIG_ZMK_MOUSE=y`
+### Clicking Not Working
+- Verify taps are enabled (no `no-taps;` in trackpad config)
+- Check if trackpad surface responds to light taps
+- Ensure hardware sensitivity is appropriate (`"4x"`)
+
+### Scroll Mode Issues
+- Double-tap timing may need adjustment (currently 200ms)
+- Practice double-tapping in same spot on trackpad
+- Any single tap should exit scroll mode back to cursor mode
+- Mode has no visual indicator - test by attempting to scroll vs move cursor
+
+### Connection or Pairing Issues
+- Clear Bluetooth pairing and re-pair device
+- Check battery level if using battery power
+- Verify `CONFIG_ZMK_MOUSE=y` is in configuration
+- Restart host device's Bluetooth if needed
 
 ### Build Failures
-- Ensure all required modules are included in `west.yml`
-- Verify devicetree syntax in overlay files
-- Check that ZMK Studio is disabled if not needed
+- Ensure Cirque input module is properly included in `west.yml`
+- Verify all devicetree syntax is correct in overlay files
+- Check that input processor includes are present
+- Confirm no duplicate configuration files exist
 
 ## Hardware Notes
 
