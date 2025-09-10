@@ -2,17 +2,27 @@
 #include <dt-bindings/zmk/keys.h>
 
 / {
+    behaviors {
+        /* Double-tap behavior for scroll mode toggle */
+        dt_scroll: double_tap_scroll {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&none>, <&tog 1>;  /* Single tap: nothing, Double tap: toggle scroll layer */
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
         
         default_layer {
             /* Layer 0: Normal cursor mode */
-            bindings = <&none>;
+            bindings = <&dt_scroll>;  /* Double-tap to toggle scroll */
         };
         
         scroll_layer {
-            /* Layer 1: Auto-activated scroll mode */
-            bindings = <&none>;
+            /* Layer 1: Scroll mode */
+            bindings = <&tog 1>;  /* Any tap exits scroll mode */
         };
     };
 };
