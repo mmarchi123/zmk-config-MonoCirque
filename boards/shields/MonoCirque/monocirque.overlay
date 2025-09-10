@@ -1,5 +1,5 @@
 /*
- * MonoCirque - Standalone Cirque Trackpad
+ * MonoCirque - Standalone Cirque Trackpad with Edge Scroll & Pressure Speed
  */
 
 #include <dt-bindings/zmk/matrix_transform.h>
@@ -29,10 +29,101 @@
         row-gpios = <&xiao_d 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
     };
 
-    /* Input listener for trackpad */
+    /* Edge scroll zones */
+    right_scroll: right_scroll {
+        compatible = "zmk,input-processor-transform";
+        #input-processor-cells = <0>;
+        
+        /* Right edge (15%) becomes vertical scroll */
+        x-min = <85>;
+        x-max = <100>;
+        
+        /* Disable cursor movement, enable scroll */
+        x-matrix = <0 0 0>;   /* No X movement */
+        y-matrix = <0 0 -3>;  /* Y becomes vertical scroll */
+        z-matrix = <0 1 0>;   /* Preserve original Y */
+    };
+    
+    bottom_scroll: bottom_scroll {
+        compatible = "zmk,input-processor-transform";
+        #input-processor-cells = <0>;
+        
+        /* Bottom edge (15%) becomes horizontal scroll */
+        y-min = <85>;
+        y-max = <100>;
+        
+        /* Disable cursor movement, enable scroll */
+        x-matrix = <0 0 3>;   /* X becomes horizontal scroll */
+        y-matrix = <0 0 0>;   /* No Y movement */
+        z-matrix = <1 0 0>;   /* Preserve original X */
+    };
+
+    /* Pressure-controlled speed for main area */
+    feather_light: feather_light {
+        compatible = "zmk,input-processor-transform";
+        #input-processor-cells = <0>;
+        
+        /* Light touch = precision mode */
+        z-min = <10>;
+        z-max = <60>;
+        
+        /* Exclude scroll edges */
+        x-min = <0>;
+        x-max = <84>;  /* Exclude right edge */
+        y-min = <0>;
+        y-max = <84>;  /* Exclude bottom edge */
+        
+        /* Slow, precise movement */
+        x-matrix = <1 0 0>;
+        y-matrix = <0 1 0>;
+    };
+    
+    feather_medium: feather_medium {
+        compatible = "zmk,input-processor-transform";
+        #input-processor-cells = <0>;
+        
+        /* Medium pressure = normal speed */
+        z-min = <61>;
+        z-max = <120>;
+        
+        /* Exclude scroll edges */
+        x-min = <0>;
+        x-max = <84>;
+        y-min = <0>;
+        y-max = <84>;
+        
+        /* Normal speed */
+        x-matrix = <3 0 0>;
+        y-matrix = <0 3 0>;
+    };
+    
+    feather_firm: feather_firm {
+        compatible = "zmk,input-processor-transform";
+        #input-processor-cells = <0>;
+        
+        /* Firm pressure = fast mode */
+        z-min = <121>;
+        z-max = <255>;
+        
+        /* Exclude scroll edges */
+        x-min = <0>;
+        x-max = <84>;
+        y-min = <0>;
+        y-max = <84>;
+        
+        /* Fast movement */
+        x-matrix = <8 0 0>;
+        y-matrix = <0 8 0>;
+    };
+
+    /* Input listener with chained processors */
     trackpad_listener {
         compatible = "zmk,input-listener";
         device = <&trackpad>;
+        
+        /* Process in order: scroll zones first, then pressure zones */
+        input-processors = <&right_scroll>, <&bottom_scroll>, 
+                           <&feather_light>, <&feather_medium>, <&feather_firm>;
     };
 };
 
@@ -48,7 +139,6 @@
         status = "okay";
         dr-gpios = <&xiao_d 6 (GPIO_ACTIVE_HIGH)>;
         sensitivity = "4x";
-        y-invert;
         sleep;
         no-taps;
     };
