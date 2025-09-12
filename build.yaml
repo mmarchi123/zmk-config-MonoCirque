@@ -22,3 +22,5 @@ include:
   - board: seeeduino_xiao_ble
     shield: monocirque
     cmake-args: -DCONFIG_ZMK_STUDIO=n
+  - board: seeeduino_xiao_ble
+    shield: settings_reset
