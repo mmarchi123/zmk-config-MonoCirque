@@ -1,9 +1,9 @@
-/**
- * MonoCirque - Standalone Cirque Trackpad with Simple Gestures
- * Start with basic gesture support, minimal changes from your working config
+/*
+ * MonoCirque - Standalone Cirque Trackpad with Tap & Double-Tap Scroll
  */
 
 #include <dt-bindings/zmk/matrix_transform.h>
+#include <input/processors.dtsi>
 
 / {
     model = "MonoCirque Trackpad";
@@ -29,14 +29,14 @@
         row-gpios = <&xiao_d 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
     };
 
-    /* Trackpad input listener - exactly like your original for now */
+    /* Trackpad input listener - simplified without button behaviors */
     trackpad_listener {
         compatible = "zmk,input-listener";
         device = <&trackpad>;
-       
+        
         /* Base: Normal cursor movement with 2x speed */
         input-processors = <&zip_xy_scaler 2 1>;
-       
+        
         /* Scroll mode - activated by layer switching */
         scroll_mode {
             layers = <1>;
@@ -45,11 +45,11 @@
     };
 };
 
-/* Cirque Trackpad SPI Configuration - exactly like your original */
+/* Cirque Trackpad SPI Configuration - with taps enabled */
 &xiao_spi {
     status = "okay";
     cs-gpios = <&xiao_d 7 GPIO_ACTIVE_LOW>;
-   
+    
     trackpad: trackpad@0 {
         compatible = "cirque,pinnacle";
         reg = <0>;
