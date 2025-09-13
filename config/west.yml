@@ -6,12 +6,23 @@ manifest:
       url-base: https://github.com/zmkfirmware
     - name: petejohanson  # ADD THIS
       url-base: https://github.com/petejohanson
+    # Add this:
+    - name: halfdane
+      url-base: https://github.com/halfdane/
   projects:
     - name: zmk
       remote: zmkfirmware
       import: app/west.yml
-    - name: cirque-input-module  # ADD THIS
-      remote: petejohanson
+    # Add this:
+    - name: zmk-input-gestures
+      remote: halfdane
       revision: main
+    # Add these if you want to use absolute mode:
+    - name: zmk-input-processors
+      remote: halfdane
+      revision: main
+    - name: cirque-input-module
+      remote: halfdane
+      revision: absolute_mode
   self:
     path: config

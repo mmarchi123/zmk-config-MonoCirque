@@ -1,5 +1,13 @@
 #include <physical_layouts.dtsi>
 
+// to use gestures this is always necessary:
+#include <behaviors/input_processor_gestures.dtsi>
+
+// to translate absolute positions to relative positions. If you don't
+// want to use gestures for absolute mode, and you don't want to activate it,
+// you can ignore this line
+#include <behaviors/input_processor_absolute_to_relative.dtsi>
+
 / {
     physical_layout0: physical_layout_0 {
         compatible = "zmk,physical-layout";
