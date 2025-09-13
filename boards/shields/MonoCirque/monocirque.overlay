@@ -27,7 +27,112 @@
         wakeup-source;
         col-gpios = <&xiao_d 0 GPIO_ACTIVE_HIGH>;
         row-gpios = <&xiao_d 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
+    };/**
+ * MonoCirque - Standalone Cirque Trackpad with ZMK Input Gestures
+ * Enhanced with tap detection, inertial cursor, and circular scroll
+ */
+
+#include <dt-bindings/zmk/matrix_transform.h>
+#include <input/processors.dtsi>
+
+// Add gesture includes
+#include <behaviors/input_processor_gestures.dtsi>
+#include <behaviors/input_processor_absolute_to_relative.dtsi>
+
+/ {
+    model = "MonoCirque Trackpad";
+    compatible = "zmk,generic-keyboard";
+
+    chosen {
+        zmk,kscan = &kscan0;
+        zmk,matrix-transform = &default_transform;
     };
+
+    default_transform: keymap_transform_0 {
+        compatible = "zmk,matrix-transform";
+        columns = <1>;
+        rows = <1>;
+        map = <RC(0,0)>;
+    };
+
+    /* Minimal dummy kscan - required by ZMK but not physically connected */
+    kscan0: kscan {
+        compatible = "zmk,kscan-gpio-matrix";
+        wakeup-source;
+        col-gpios = <&xiao_d 0 GPIO_ACTIVE_HIGH>;
+        row-gpios = <&xiao_d 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
+    };
+
+    /* Trackpad input listener - enhanced with gestures */
+    trackpad_listener {
+        compatible = "zmk,input-listener";
+        device = <&trackpad>;
+        
+        /* Base: Gestures + cursor movement with 2x speed */
+        input-processors = <
+            &zip_gestures
+            &zip_absolute_to_relative
+            &zip_xy_scaler 2 1
+        >;
+        
+        /* Scroll mode - activated by layer switching */
+        scroll_mode {
+            layers = <1>;
+            input-processors = <
+                &zip_gestures
+                &zip_absolute_to_relative
+                &zip_xy_to_scroll_mapper
+            >;
+        };
+    };
+};
+
+/* Configure gesture behaviors */
+&zip_gestures {
+    /* Tap detection - converts quick touches to mouse clicks */
+    tap-detection;
+    tap-timout-ms = <150>;           // Slightly longer for better reliability
+    prevent-movement-during-tap;     // Prevents accidental movement during tap
+    
+    /* Inertial cursor - keeps cursor moving after touch ends */
+    inertial-cursor;
+    inertial-cursor-velocity-threshold-ms = <25>;  // Moderate sensitivity
+    inertial-cursor-decay-percent = <96>;          // Smooth deceleration
+    
+    /* Circular scroll - scroll by moving finger in circular motion on edge */
+    circular-scroll;
+    circular-scroll-rim-percent = <15>;     // 15% outer edge activates scroll
+    circular-scroll-width = <1024>;
+    circular-scroll-height = <1024>;
+    
+    /* Gesture timing - wait time for position updates */
+    wait-for-new-position-ms = <25>;
+};
+
+/* Cirque Trackpad SPI Configuration - enhanced with absolute mode */
+&xiao_spi {
+    status = "okay";
+    cs-gpios = <&xiao_d 7 GPIO_ACTIVE_LOW>;
+    
+    trackpad: trackpad@0 {
+        compatible = "cirque,pinnacle";
+        reg = <0>;
+        spi-max-frequency = <1000000>;
+        status = "okay";
+        dr-gpios = <&xiao_d 6 (GPIO_ACTIVE_HIGH)>;
+        sensitivity = "4x";
+        sleep;
+        y-invert;
+        
+        /* Enable absolute mode for gesture support */
+        absolute-mode;
+        absolute-mode-scale-to-width = <1024>;
+        absolute-mode-scale-to-height = <1024>;
+        
+        /* Remove no-taps since gestures handle tap detection */
+        /* no-taps; */
+    };
+};
 
     /* Trackpad input listener - simplified without button behaviors */
     trackpad_listener {
